@@ -84,12 +84,12 @@ bool is_valid_5x5(int x, int y) {
 
 int get_score(const vector<vector<int>>& grid, bool do_mark) {
     fill_2d(visited, 0); // 방문 초기화
-    fill_2d(rem_select, 0);
+    fill_2d(rem_select, 0);  // rem_select는 블록을 구분하여 번호를 부여하는 배열
 
     queue<POS>bfs_q;
-    set<int>mark_set;
+    set<int>mark_set; // mark_set은 그중 "진짜 점수로 인정되는 블록"만 저장 (1~ ... ) 이 있을 때 그 중 진짜 블록들만 저장
 
-    int acc = 0, mark = 0;
+    int acc = 0, mark = 0; // mark는 블록을 1부터 증가하면서 블록을 구분하는 용도
     for (int i = 0; i < grid.size(); i++) {
         for (int j = 0; j < grid[i].size(); j++) {
             if (visited[i][j]) continue;
@@ -125,8 +125,8 @@ int get_score(const vector<vector<int>>& grid, bool do_mark) {
     if (do_mark) {
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid[i].size(); j++) {
-                if (mark_set.find(rem_select[i][j]) == mark_set.end()) rem_select[i][j] = 0;
-                else rem_select[i][j] = 1;
+                if (mark_set.find(rem_select[i][j]) == mark_set.end()) rem_select[i][j] = 0;  // mark_set에  rem_select[i][j] 숫자가 없다면  rem_select[i][j] = 0
+                else rem_select[i][j] = 1; // mark_set에  rem_select[i][j] 숫자가 없다면  rem_select[i][j] = 0
             }
         }
     }
@@ -183,7 +183,7 @@ int get_score_cascaded() {
         // 빈 공간 채우기
         for (int i = 0; i < 5; i++) {  // 열번호가 작은 순으로
             for (int j = 4; j >= 0; j--) { // 동률이면 행번호가 큰 순으로 조각이 생겨남
-                if (rem_select[j][i] == 1) {
+                if (rem_select[j][i] == 1) {  // rem_select이 1이라는 것은 mark_select 즉, 유효한 유물의 목록에 포함된다는 뜻
                     grid[j][i] = next_num.front(); next_num.pop();
                 }
             }
